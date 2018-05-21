@@ -24,27 +24,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListViewHolder> {
     private PictureDownloader mPictureDownloader;
 
     public HomeListAdapter(HomeListListener listener, PictureDownloader pictureDownloader) {
-
-        /*CharacterModel caracter1 = new CharacterModel();
-        ImageModel imageModel = new ImageModel();
-        imageModel.setExtension("jpg");
-        imageModel.setPath("http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16");
-        caracter1.setThumbnail(imageModel);
-
-
-
-        mCharacters = new ArrayList<>();
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);
-        mCharacters.add(caracter1);*/
         mCharacters = new ArrayList<>();
         mCharacterListListener = listener;
         mPictureDownloader = pictureDownloader;
@@ -68,11 +47,22 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListViewHolder> {
     }
 
     public void setCharacters(List<CharacterModel> characters) {
+        this.mCharacters.clear();
         this.mCharacters = characters;
         notifyDataSetChanged();
     }
 
     public List<CharacterModel> getCharacters() {
         return mCharacters;
+    }
+
+    public void addCharacters(List<CharacterModel> characters) {
+        mCharacters.addAll(characters);
+        notifyDataSetChanged();
+    }
+
+    public void removeAll() {
+        mCharacters.clear();
+        notifyDataSetChanged();
     }
 }

@@ -9,5 +9,7 @@ import com.mricomat.marvelcomicguide.ui.home.view.HomeListView;
 
 public interface HomeListPresenter extends BasePresenter<HomeListView> {
 
+    void loadCharacters(Integer offset, Integer limit, String searchQuery);
+
 }
 

@@ -5,24 +5,25 @@ import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /**
  * Created by mricomat on 15/05/2018.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class CharacterModel implements Parcelable{
 
-    @JsonProperty("id")
+    @SerializedName("id")
     private int mId;
-    @JsonProperty("name")
+    @SerializedName("name")
     private String mName;
-    @JsonProperty("description")
+    @SerializedName("description")
     private String mDescription;
-    @JsonProperty("thumbnail")
+    @SerializedName("thumbnail")
     private ImageModel mThumbnail;
-    @JsonProperty("urls")
+    @SerializedName("urls")
     private List<UrlModel> mUrlModels;
 
     public CharacterModel() {

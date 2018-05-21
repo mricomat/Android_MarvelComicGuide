@@ -1,6 +1,8 @@
 package com.mricomat.marvelcomicguide.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by mricomat on 15/05/2018.
@@ -8,15 +10,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DataWrapperModel<T> {
 
-    @JsonProperty("code")
+    @SerializedName("code")
     private int mCode;
-    @JsonProperty("status")
+    @SerializedName("status")
     private String mStatus;
-    @JsonProperty("copyright")
+    @SerializedName("copyright")
     private String mCopyright;
-    @JsonProperty("attributionHTML")
+    @SerializedName("attributionHTML")
     private String mAttributionText;
-    @JsonProperty("data")
+    @SerializedName("data")
     private DataContainerModel<T> mData;
 
     public DataWrapperModel() {

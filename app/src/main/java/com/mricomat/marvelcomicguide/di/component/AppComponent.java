@@ -5,6 +5,7 @@ import android.app.Application;
 import com.mricomat.marvelcomicguide.MarvelApplication;
 import com.mricomat.marvelcomicguide.di.modules.ActivityBindingModule;
 import com.mricomat.marvelcomicguide.di.modules.AppModule;
+import com.mricomat.marvelcomicguide.di.modules.MarvelApiModule;
 import com.mricomat.marvelcomicguide.di.modules.PictureDownloaderModule;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
@@ -22,6 +23,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Singleton
 @Component(modules = {ActivityBindingModule.class,
     AppModule.class,
+    MarvelApiModule.class,
     PictureDownloaderModule.class,
     AndroidSupportInjectionModule.class})
 public interface AppComponent extends AndroidInjector<MarvelApplication> {

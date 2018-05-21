@@ -8,7 +8,8 @@ import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -20,15 +21,15 @@ import retrofit2.http.Query;
 public interface MarvelApi {
 
     @GET("characters")
-    Call<DataWrapperModel<List<CharacterModel>>> getCharacters(@Query("apikey") String apiKey,
-                                                               @Query("hash") String md5Key,
-                                                               @Query("ts") long timestamp,
-                                                               @Nullable @Query("offset") Integer offset,
-                                                               @Nullable @Query("limit") Integer limit,
-                                                               @Nullable @Query("nameStartWith") String searchQuery);
+    Observable<DataWrapperModel<List<CharacterModel>>> getCharacters(@Query("apikey") String apiKey,
+                                                                 @Query("hash") String md5Key,
+                                                                 @Query("ts") long timestamp,
+                                                                 @Nullable @Query("offset") Integer offset,
+                                                                 @Nullable @Query("limit") Integer limit,
+                                                                 @Nullable @Query("nameStartWith") String searchQuery);
 
     @GET("characters/{characterId}/{comicType}")
-    Call<DataWrapperModel<List<ComicModel>>> getCharacterComics(@Path("characterId") long characterId,
+    Observable<DataWrapperModel<List<ComicModel>>> getCharacterComics(@Path("characterId") long characterId,
                                                                 @Path("comicType") String comicType,
                                                                 @Query("offset") Integer offset,
                                                                 @Query("limit") Integer limit,

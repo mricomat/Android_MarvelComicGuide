@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by mricomat on 15/05/2018.
@@ -11,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ImageModel implements Parcelable{
 
-    @JsonProperty("path")
+    @SerializedName("path")
     private String mPath;
-    @JsonProperty("extension")
+    @SerializedName("extension")
     private String mExtension;
 
     public ImageModel() {

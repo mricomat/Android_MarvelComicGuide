@@ -5,38 +5,39 @@ import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /**
  * Created by mricomat on 15/05/2018.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class ComicModel implements Parcelable{
 
-    @JsonProperty("id")
+    @SerializedName("id")
     private Integer mId;
-    @JsonProperty("title")
+    @SerializedName("title")
     private String mTitle;
-    @JsonProperty("description")
+    @SerializedName("description")
     private Object mDescription;
-    @JsonProperty("startYear")
+    @SerializedName("startYear")
     private Integer mStartYear;
-    @JsonProperty("endYear")
+    @SerializedName("endYear")
     private Integer mEndYear;
-    @JsonProperty("rating")
+    @SerializedName("rating")
     private String mRating;
-    @JsonProperty("type")
+    @SerializedName("type")
     private String mType;
-    @JsonProperty("modified")
+    @SerializedName("modified")
     private String mModified;
-    @JsonProperty("name")
+    @SerializedName("name")
     private String mName;
-    @JsonProperty("resourceURI")
+    @SerializedName("resourceURI")
     private String mResourceUri;
-    @JsonProperty(value = "thumbnail")
+    @SerializedName(value = "thumbnail")
     private ImageModel mThumbnail;
-    @JsonProperty(value = "images")
+    @SerializedName(value = "images")
     private List<ImageModel> mImageList;
 
     public ComicModel() {

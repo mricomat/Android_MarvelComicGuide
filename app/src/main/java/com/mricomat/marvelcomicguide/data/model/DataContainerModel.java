@@ -2,22 +2,23 @@ package com.mricomat.marvelcomicguide.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by mricomat on 15/05/2018.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class DataContainerModel<T> {
 
-    @JsonProperty("offset")
+    @SerializedName("offset")
     private int mOffset;
-    @JsonProperty("limit")
+    @SerializedName("limit")
     private int mLimit;
-    @JsonProperty("total")
+    @SerializedName("total")
     private int mTotal;
-    @JsonProperty("count")
+    @SerializedName("count")
     private int mCount;
-    @JsonProperty("results")
+    @SerializedName("results")
     private T mResults;
 
     public DataContainerModel() {
