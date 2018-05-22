@@ -12,10 +12,16 @@ public interface HomeListView {
 
     void showCharacters(List<CharacterModel> characterModels);
 
+    void showSearchedCharacters(List<CharacterModel> characterModels);
+
     void refreshCharacters();
 
     void showLoading();
 
     void hideLoading();
+
+    void showEmptyContainer();
+
+    void hideEmptyContainer();
 
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
-import com.mricomat.marvelcomicguide.data.model.ImageModel;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import java.util.ArrayList;
@@ -20,12 +19,14 @@ import java.util.List;
 
 public class HomeListAdapter extends RecyclerView.Adapter {
 
-    private final int ITEM_VIEW_TYPE_BASIC = 0;
-    private final int ITEM_VIEW_TYPE_FOOTER = 1;
+    public static final int ITEM_VIEW_TYPE_BASIC = 0;
+    public static final int ITEM_VIEW_TYPE_SEARCH = 1;
+    private static final int ITEM_VIEW_TYPE_FOOTER = 2;
 
     private List<CharacterModel> mCharacters;
     private HomeListListener mCharacterListListener;
     private PictureDownloader mPictureDownloader;
+    private int mType = ITEM_VIEW_TYPE_BASIC;
 
     public HomeListAdapter(HomeListListener listener, PictureDownloader pictureDownloader) {
         mCharacters = new ArrayList<>();
@@ -37,8 +38,12 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder viewHolder;
+
         if (viewType == ITEM_VIEW_TYPE_BASIC) {
             View view = inflater.inflate(R.layout.home_list_item, parent, false);
+            viewHolder = new HomeListViewHolder(view, mCharacterListListener, mPictureDownloader);
+        } else if (viewType == ITEM_VIEW_TYPE_SEARCH) {
+            View view = inflater.inflate(R.layout.home_list_searched_item, parent, false);
             viewHolder = new HomeListViewHolder(view, mCharacterListListener, mPictureDownloader);
         } else {
             View view = inflater.inflate(R.layout.progress_bar_list_item, parent, false);
@@ -58,7 +63,11 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mCharacters.get(position) != null ? ITEM_VIEW_TYPE_BASIC : ITEM_VIEW_TYPE_FOOTER;
+        if (mCharacters.get(position) != null) {
+            return mType;
+        } else {
+            return ITEM_VIEW_TYPE_FOOTER;
+        }
     }
 
     @Override
@@ -66,11 +75,19 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         return mCharacters == null ? 0 : mCharacters.size();
     }
 
+    public void setType(int type){
+        this.mType = type;
+    }
+
     public GridLayoutManager.SpanSizeLookup getNewSpanSizeLookUp() {
         return new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return getItemViewType(position) == ITEM_VIEW_TYPE_BASIC ? 1 : 2;
+                if (getItemViewType(position) == ITEM_VIEW_TYPE_BASIC) {
+                    return 1;
+                } else {
+                    return 2;
+                }
             }
         };
     }
@@ -86,7 +103,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     }
 
     public void addCharacters(List<CharacterModel> characters) {
-        if (mCharacters.size() != 0)  {
+        if (mCharacters.size() != 0) {
             mCharacters.remove(null);
         }
         mCharacters.addAll(characters);

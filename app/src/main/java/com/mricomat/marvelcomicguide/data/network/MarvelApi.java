@@ -26,7 +26,7 @@ public interface MarvelApi {
                                                                  @Query("ts") long timestamp,
                                                                  @Nullable @Query("offset") Integer offset,
                                                                  @Nullable @Query("limit") Integer limit,
-                                                                 @Nullable @Query("nameStartWith") String searchQuery);
+                                                                 @Nullable @Query("nameStartsWith") String searchQuery);
 
     @GET("characters/{characterId}/{comicType}")
     Observable<DataWrapperModel<List<ComicModel>>> getCharacterComics(@Path("characterId") long characterId,

@@ -3,7 +3,6 @@ package com.mricomat.marvelcomicguide.ui.home.presenter;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;
 import com.mricomat.marvelcomicguide.ui.home.HomeListInteractor;
-import com.mricomat.marvelcomicguide.ui.home.HomeListInteractorImpl;
 import com.mricomat.marvelcomicguide.ui.home.view.HomeListView;
 
 import java.util.ArrayList;
@@ -13,9 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.internal.operators.single.SingleDoOnDispose;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -43,7 +40,7 @@ public class HomeListPresenterImpl implements HomeListPresenter {
     @Override
     public void takeView(HomeListView view) {
         this.mView = view;
-        loadCharacters(ITEM_REQUEST_INITIAL_OFFSET, ITEM_REQUEST_LIMIT, null);
+        initialLoadCharacters();
     }
 
     @Override
@@ -55,7 +52,12 @@ public class HomeListPresenterImpl implements HomeListPresenter {
     }
 
     @Override
-    public void loadCharacters(final Integer offset, Integer limit, String searchQuery) {
+    public void initialLoadCharacters() {
+        loadCharacters(ITEM_REQUEST_INITIAL_OFFSET, ITEM_REQUEST_LIMIT, null);
+    }
+
+    @Override
+    public void loadCharacters(final Integer offset, Integer limit, final String searchQuery) {
         if (mCharacters.isEmpty()) {
             mView.showLoading();
         }
@@ -66,7 +68,18 @@ public class HomeListPresenterImpl implements HomeListPresenter {
                 @Override
                 public void accept(DataWrapperModel<List<CharacterModel>> listDataWrapperModel) throws Exception {
                     mCharacters = listDataWrapperModel.getData().getResults();
-                    mView.showCharacters(mCharacters);
+                    if (searchQuery != null) {
+                        mView.showSearchedCharacters(mCharacters);
+                    } else {
+                        mView.showCharacters(mCharacters);
+                    }
+
+                    if (mCharacters.isEmpty()) {
+                        mView.showEmptyContainer();
+                    } else {
+                        mView.hideEmptyContainer();
+                    }
+
                     mView.hideLoading();
                 }
             }, new Consumer<Throwable>() {

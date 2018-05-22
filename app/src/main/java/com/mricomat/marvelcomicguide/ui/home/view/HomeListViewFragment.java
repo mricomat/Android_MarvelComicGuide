@@ -1,11 +1,18 @@
 package com.mricomat.marvelcomicguide.ui.home.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -31,7 +38,8 @@ import dagger.android.support.DaggerFragment;
  * Created by mricomat on 15/05/2018.
  */
 
-public class HomeListViewFragment extends DaggerFragment implements HomeListView, HomeListListener {
+public class HomeListViewFragment extends DaggerFragment implements HomeListView, HomeListListener,
+    SearchView.OnQueryTextListener {
 
     private static final int ITEM_REQUEST_INITIAL_OFFSET = 0;
     private static final int ITEM_REQUEST_LIMIT = 12;
@@ -55,6 +63,8 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     PictureDownloader mPictureDownloader;
 
     private HomeListAdapter mAdapter;
+    private String mSearchQuery;
+    private String mLastQuery;
 
     @Inject
     public HomeListViewFragment() {
@@ -64,12 +74,8 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
+        setHasOptionsMenu(true);
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.takeView(this); // TODO o en onAttach?
     }
 
     @Override
@@ -83,6 +89,8 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mRootView = inflater.inflate(R.layout.home_list_fragment, container, false);
         ButterKnife.bind(this, mRootView);
+
+        mPresenter.takeView(this);
         fillViews();
         return mRootView;
     }
@@ -116,8 +124,10 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
         mHomeRecyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                mAdapter.addCharacter(null);
-                mPresenter.loadCharacters(totalItemsCount, null, null);
+                if(TextUtils.isEmpty(mSearchQuery)){
+                    mAdapter.addCharacter(null);
+                    mPresenter.loadCharacters(totalItemsCount, ITEM_REQUEST_LIMIT, mSearchQuery);
+                }
             }
         });
     }
@@ -133,9 +143,17 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     }
 
     @Override
+    public void showSearchedCharacters(List<CharacterModel> characterModels) {
+        if (!mLastQuery.equals(mSearchQuery)) {
+            mAdapter.removeAll();
+        }
+        mAdapter.addCharacters(characterModels);
+    }
+
+    @Override
     public void refreshCharacters() {
         mAdapter.removeAll();
-        mPresenter.loadCharacters(ITEM_REQUEST_INITIAL_OFFSET, ITEM_REQUEST_LIMIT, null);
+        mPresenter.initialLoadCharacters();
     }
 
     @Override
@@ -149,5 +167,67 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     public void hideLoading() {
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showEmptyContainer() {
+        mEmptyContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideEmptyContainer() {
+        mEmptyContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(this);
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search),
+            new MenuItemCompat.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    mSwipeRefreshLayout.setEnabled(false);
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    mAdapter.setType(HomeListAdapter.ITEM_VIEW_TYPE_BASIC);
+                    if (mSearchQuery != null) {
+                        showLoading();
+                        mAdapter.removeAll();
+                        mPresenter.initialLoadCharacters();
+                    }
+                    mSearchQuery = "";
+                    mSwipeRefreshLayout.setEnabled(true);
+                    return true;
+                }
+            });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String searchQuery) {
+        mSearchQuery = searchQuery;
+        if (!TextUtils.isEmpty(searchQuery)) {
+            mPresenter.loadCharacters(ITEM_REQUEST_INITIAL_OFFSET, ITEM_REQUEST_LIMIT, searchQuery);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String searchQuery) {
+        mLastQuery = mSearchQuery;
+        mSearchQuery = searchQuery;
+        if (!TextUtils.isEmpty(searchQuery)) {
+            if (!mLastQuery.equals(mSearchQuery)) {
+                showLoading();
+            }
+            mAdapter.setType(HomeListAdapter.ITEM_VIEW_TYPE_SEARCH);
+            mPresenter.loadCharacters(ITEM_REQUEST_INITIAL_OFFSET, null, searchQuery); // TODO Arreglar el endlessScroll
+            return true;
+        }
+        return false;
     }
 }
