@@ -1,5 +1,6 @@
 package com.mricomat.marvelcomicguide.ui.home.adapter;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,10 @@ import java.util.List;
  * Created by mricomat on 15/05/2018.
  */
 
-public class HomeListAdapter extends RecyclerView.Adapter<HomeListViewHolder> {
+public class HomeListAdapter extends RecyclerView.Adapter {
+
+    private final int ITEM_VIEW_TYPE_BASIC = 0;
+    private final int ITEM_VIEW_TYPE_FOOTER = 1;
 
     private List<CharacterModel> mCharacters;
     private HomeListListener mCharacterListListener;
@@ -30,20 +34,45 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListViewHolder> {
     }
 
     @Override
-    public HomeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.home_list_item, parent, false);
-        return new HomeListViewHolder(view, mCharacterListListener, mPictureDownloader);
+        RecyclerView.ViewHolder viewHolder;
+        if (viewType == ITEM_VIEW_TYPE_BASIC) {
+            View view = inflater.inflate(R.layout.home_list_item, parent, false);
+            viewHolder = new HomeListViewHolder(view, mCharacterListListener, mPictureDownloader);
+        } else {
+            View view = inflater.inflate(R.layout.progress_bar_list_item, parent, false);
+            viewHolder = new ProgressBarViewHolder(view);
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(HomeListViewHolder holder, int position) {
-        holder.bindModel(mCharacters.get(position));
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof HomeListViewHolder) {
+            ((HomeListViewHolder) holder).bindModel(mCharacters.get(position));
+        } else {
+            ((ProgressBarViewHolder) holder).getProgressBar().setIndeterminate(true);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mCharacters.get(position) != null ? ITEM_VIEW_TYPE_BASIC : ITEM_VIEW_TYPE_FOOTER;
     }
 
     @Override
     public int getItemCount() {
         return mCharacters == null ? 0 : mCharacters.size();
+    }
+
+    public GridLayoutManager.SpanSizeLookup getNewSpanSizeLookUp() {
+        return new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return getItemViewType(position) == ITEM_VIEW_TYPE_BASIC ? 1 : 2;
+            }
+        };
     }
 
     public void setCharacters(List<CharacterModel> characters) {
@@ -57,8 +86,21 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListViewHolder> {
     }
 
     public void addCharacters(List<CharacterModel> characters) {
+        if (mCharacters.size() != 0)  {
+            mCharacters.remove(null);
+        }
         mCharacters.addAll(characters);
         notifyDataSetChanged();
+    }
+
+    public void addCharacter(CharacterModel characterModel) {
+        if (characterModel != null) {
+            mCharacters.add(characterModel);
+            notifyDataSetChanged();
+        } else {
+            mCharacters.add(null);
+            notifyItemInserted(mCharacters.size() - 1);
+        }
     }
 
     public void removeAll() {

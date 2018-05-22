@@ -111,10 +111,12 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
         mAdapter = new HomeListAdapter(this, mPictureDownloader);
         mHomeRecyclerView.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager.setSpanSizeLookup(mAdapter.getNewSpanSizeLookUp());
         mHomeRecyclerView.setLayoutManager(gridLayoutManager);
         mHomeRecyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
+                mAdapter.addCharacter(null);
                 mPresenter.loadCharacters(totalItemsCount, null, null);
             }
         });

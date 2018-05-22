@@ -6,6 +6,7 @@ import com.mricomat.marvelcomicguide.ui.home.HomeListInteractor;
 import com.mricomat.marvelcomicguide.ui.home.HomeListInteractorImpl;
 import com.mricomat.marvelcomicguide.ui.home.view.HomeListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,10 +32,12 @@ public class HomeListPresenterImpl implements HomeListPresenter {
 
     private HomeListView mView;
     private CompositeDisposable mCompositeDisposable;//TODO Injectarlo para que se utilice en todos los presenters;
+    private List<CharacterModel> mCharacters;
 
     @Inject
     public HomeListPresenterImpl() {
         mCompositeDisposable = new CompositeDisposable();
+        mCharacters = new ArrayList<>();
     }
 
     @Override
@@ -53,14 +56,17 @@ public class HomeListPresenterImpl implements HomeListPresenter {
 
     @Override
     public void loadCharacters(final Integer offset, Integer limit, String searchQuery) {
-        mView.showLoading();
+        if (mCharacters.isEmpty()) {
+            mView.showLoading();
+        }
         mCompositeDisposable.add(mInteractor.getCharacters(offset, limit, searchQuery)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()) // TODO Have SchedulerProvider donde recoger los hilos
             .subscribe(new Consumer<DataWrapperModel<List<CharacterModel>>>() {
                 @Override
                 public void accept(DataWrapperModel<List<CharacterModel>> listDataWrapperModel) throws Exception {
-                    mView.showCharacters(listDataWrapperModel.getData().getResults());
+                    mCharacters = listDataWrapperModel.getData().getResults();
+                    mView.showCharacters(mCharacters);
                     mView.hideLoading();
                 }
             }, new Consumer<Throwable>() {
@@ -68,7 +74,6 @@ public class HomeListPresenterImpl implements HomeListPresenter {
                 public void accept(Throwable throwable) throws Exception {
                     mView.hideLoading();
                     // TODO ERROR HANDLER
-
                 }
             }));
     }
