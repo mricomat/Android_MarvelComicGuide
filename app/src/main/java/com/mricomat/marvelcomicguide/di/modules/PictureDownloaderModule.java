@@ -19,15 +19,9 @@ import dagger.Provides;
 
 @Module
 public class PictureDownloaderModule {
-
     @Provides
     @Singleton
     CacheImageHandler providesCacheImageHandler(Context context) {
         return new CacheImageHandler(context);
     }
-
-    /*@Singleton
-    PictureDownloader providesPictureDownloader(CacheImageHandler cacheImageHandler) {
-        return new PictureDownloader(cacheImageHandler);
-    }*/
 }

@@ -3,8 +3,6 @@ package com.mricomat.marvelcomicguide.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
  * Created by mricomat on 15/05/2018.
  */
 
-public class CharacterModel implements Parcelable{
+public class CharacterModel implements Parcelable {
 
     @SerializedName("id")
     private int mId;
@@ -74,6 +72,22 @@ public class CharacterModel implements Parcelable{
         mId = in.readInt();
         mName = in.readString();
         mDescription = in.readString();
+        mThumbnail = in.readParcelable(ImageModel.class.getClassLoader());
+        mUrlModels = in.createTypedArrayList(UrlModel.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeString(mDescription);
+        dest.writeParcelable(mThumbnail, flags);
+        dest.writeTypedList(mUrlModels);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<CharacterModel> CREATOR = new Creator<CharacterModel>() {
@@ -87,16 +101,4 @@ public class CharacterModel implements Parcelable{
             return new CharacterModel[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mId);
-        parcel.writeString(mName);
-        parcel.writeString(mDescription);
-    }
 }

@@ -1,6 +1,7 @@
 package com.mricomat.marvelcomicguide.ui.home.presenter;
 
 import com.mricomat.marvelcomicguide.BasePresenter;
+import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.ui.home.view.HomeListView;
 
 /**

@@ -1,5 +1,7 @@
 package com.mricomat.marvelcomicguide.ui.home.presenter;
 
+import android.os.Bundle;
+
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;
 import com.mricomat.marvelcomicguide.ui.home.HomeListInteractor;

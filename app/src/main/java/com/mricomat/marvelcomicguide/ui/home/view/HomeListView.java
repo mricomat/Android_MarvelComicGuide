@@ -1,5 +1,7 @@
 package com.mricomat.marvelcomicguide.ui.home.view;
 
+import android.os.Bundle;
+
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 
 import java.util.List;

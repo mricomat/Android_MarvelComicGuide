@@ -1,5 +1,6 @@
 package com.mricomat.marvelcomicguide.di.modules;
 
+import com.mricomat.marvelcomicguide.ui.character.CharacterActivity;
 import com.mricomat.marvelcomicguide.ui.home.HomeListActivity;
 import com.mricomat.marvelcomicguide.ui.home.adapter.HomeListViewHolder;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
@@ -15,4 +16,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityBindingModule {
     @ContributesAndroidInjector(modules = HomeListModule.class)
     abstract HomeListActivity providesHomeListActivity();
+
+    @ContributesAndroidInjector(modules = CharacterModule.class)
+    abstract CharacterActivity providesCharacterActivity();
 }

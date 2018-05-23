@@ -38,7 +38,6 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder viewHolder;
-
         if (viewType == ITEM_VIEW_TYPE_BASIC) {
             View view = inflater.inflate(R.layout.home_list_item, parent, false);
             viewHolder = new HomeListViewHolder(view, mCharacterListListener, mPictureDownloader);

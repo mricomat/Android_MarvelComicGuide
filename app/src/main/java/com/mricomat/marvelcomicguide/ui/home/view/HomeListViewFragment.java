@@ -1,6 +1,7 @@
 package com.mricomat.marvelcomicguide.ui.home.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
+import com.mricomat.marvelcomicguide.ui.character.CharacterActivity;
 import com.mricomat.marvelcomicguide.ui.home.adapter.EndlessRecyclerViewOnScrollListener;
 import com.mricomat.marvelcomicguide.ui.home.adapter.HomeListAdapter;
 import com.mricomat.marvelcomicguide.ui.home.adapter.HomeListListener;
@@ -38,7 +40,7 @@ import dagger.android.support.DaggerFragment;
  * Created by mricomat on 15/05/2018.
  */
 
-public class HomeListViewFragment extends DaggerFragment implements HomeListView, HomeListListener,
+public class HomeListViewFragment extends DaggerFragment implements HomeListView,
     SearchView.OnQueryTextListener {
 
     private static final int ITEM_REQUEST_INITIAL_OFFSET = 0;
@@ -65,6 +67,7 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     private HomeListAdapter mAdapter;
     private String mSearchQuery;
     private String mLastQuery;
+    private HomeListListener mListListener;
 
     @Inject
     public HomeListViewFragment() {
@@ -75,7 +78,6 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -116,7 +118,15 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     }
 
     private void initRecyclerView() {
-        mAdapter = new HomeListAdapter(this, mPictureDownloader);
+        mListListener = new HomeListListener() {
+            @Override
+            public void onCharacterClick(CharacterModel character) {
+                Intent intent = new Intent(getContext(), CharacterActivity.class);
+                intent.putExtra("123", character);
+                startActivity(intent);
+            }
+        };
+        mAdapter = new HomeListAdapter(mListListener, mPictureDownloader);
         mHomeRecyclerView.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(mAdapter.getNewSpanSizeLookUp());
@@ -130,11 +140,6 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
                 }
             }
         });
-    }
-
-    @Override
-    public void onCharacterClick(CharacterModel character) {
-        // TODO
     }
 
     @Override
