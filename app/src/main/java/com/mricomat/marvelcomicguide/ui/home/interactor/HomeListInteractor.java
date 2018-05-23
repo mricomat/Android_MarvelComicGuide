@@ -1,4 +1,4 @@
-package com.mricomat.marvelcomicguide.ui.home;
+package com.mricomat.marvelcomicguide.ui.home.interactor;
 
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
+import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterViewFragment;
 import com.mricomat.marvelcomicguide.utils.CacheImageHandler;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
@@ -74,6 +75,7 @@ public class CharacterActivity extends DaggerAppCompatActivity {
     }
 
     private void navigateToCharacterFragment() {
+        // TODO No neecesito pasarlo por agumento porque lo injecto
         Bundle args = new Bundle();
         args.putParcelable("arg_character", mCharacter);
         mCharacterViewFragment.setArguments(args);

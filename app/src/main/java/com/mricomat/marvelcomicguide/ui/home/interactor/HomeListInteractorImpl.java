@@ -1,4 +1,4 @@
-package com.mricomat.marvelcomicguide.ui.home;
+package com.mricomat.marvelcomicguide.ui.home.interactor;
 
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;
@@ -11,11 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mricomat on 18/05/2018.

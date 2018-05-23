@@ -98,13 +98,20 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     }
 
     private void fillViews() {
+        setListeners();
         initSwipeRefreshLayout();
         initRecyclerView();
-        setListeners();
     }
 
     private void setListeners() {
-
+        mListListener = new HomeListListener() {
+            @Override
+            public void onCharacterClick(CharacterModel character) {
+                Intent intent = new Intent(getContext(), CharacterActivity.class);
+                intent.putExtra("123", character);
+                startActivity(intent);
+            }
+        };
     }
 
     private void initSwipeRefreshLayout() {
@@ -118,14 +125,6 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
     }
 
     private void initRecyclerView() {
-        mListListener = new HomeListListener() {
-            @Override
-            public void onCharacterClick(CharacterModel character) {
-                Intent intent = new Intent(getContext(), CharacterActivity.class);
-                intent.putExtra("123", character);
-                startActivity(intent);
-            }
-        };
         mAdapter = new HomeListAdapter(mListListener, mPictureDownloader);
         mHomeRecyclerView.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
