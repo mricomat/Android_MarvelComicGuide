@@ -70,7 +70,7 @@ public class CharacterPresenterImpl implements CharacterPresenter {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
                     // TODO HANDLER ERROR
-                    //mView.hideLoading();
+                    mView.hideLoading();
                 }
             }));
     }

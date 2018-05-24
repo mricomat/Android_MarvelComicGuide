@@ -53,8 +53,8 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     @BindView(R.id.events_recycler_view)
     RecyclerView mEventsRecycleView;
 
-    @BindView(R.id.progressBar)
-    ProgressBar mProgressBar;
+    @BindView(R.id.progress_bar_container)
+    RelativeLayout mProgressBar;
 
     @Inject
     PictureDownloader mPictureDownloader;
