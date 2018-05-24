@@ -9,8 +9,7 @@ import android.view.View;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
-import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterViewFragment;
-import com.mricomat.marvelcomicguide.utils.CacheImageHandler;
+import com.mricomat.marvelcomicguide.ui.character.view.CharacterViewFragment;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import javax.inject.Inject;

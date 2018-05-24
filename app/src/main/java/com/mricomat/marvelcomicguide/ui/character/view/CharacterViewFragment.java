@@ -1,4 +1,4 @@
-package com.mricomat.marvelcomicguide.ui.character.adapter;
+package com.mricomat.marvelcomicguide.ui.character.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +13,8 @@ import android.widget.TextView;
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
+import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterAdapter;
 import com.mricomat.marvelcomicguide.ui.character.presenter.CharacterPresenter;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterListListener;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterView;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import java.util.List;
@@ -67,7 +66,7 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     private CharacterAdapter mComicsAdapter;
     private CharacterAdapter mSeriesAdapter;
     private CharacterAdapter mEventsAdapter;
-    private CharacterListListener mListListener;
+    private CharacterListComicListener mListListener;
 
     @Inject
     public CharacterViewFragment() {
@@ -104,7 +103,7 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     }
 
     private void setListeners() {
-        mListListener = new CharacterListListener() {
+        mListListener = new CharacterListComicListener() {
             @Override
             public void onCharacterClick(ComicModel comic) {
                 // TODO

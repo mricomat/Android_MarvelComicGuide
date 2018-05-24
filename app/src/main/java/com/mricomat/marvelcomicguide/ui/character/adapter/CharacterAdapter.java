@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterListListener;
+import com.mricomat.marvelcomicguide.ui.character.view.CharacterListComicListener;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import java.util.ArrayList;
@@ -19,11 +19,11 @@ import java.util.List;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterViewHolder> {
 
-    private CharacterListListener mListListener;
+    private CharacterListComicListener mListListener;
     private PictureDownloader mPictureDownloader;
     private List<ComicModel> mComics;
 
-    public CharacterAdapter(CharacterListListener listListener, PictureDownloader pictureDownloader) {
+    public CharacterAdapter(CharacterListComicListener listListener, PictureDownloader pictureDownloader) {
         this.mListListener = listListener;
         this.mPictureDownloader = pictureDownloader;
         mComics = new ArrayList<>();

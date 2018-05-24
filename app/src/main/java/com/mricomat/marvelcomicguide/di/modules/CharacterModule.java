@@ -6,7 +6,7 @@ import com.mricomat.marvelcomicguide.ui.character.interactor.CharacterInteractor
 import com.mricomat.marvelcomicguide.ui.character.interactor.CharacterInteractorImpl;
 import com.mricomat.marvelcomicguide.ui.character.presenter.CharacterPresenter;
 import com.mricomat.marvelcomicguide.ui.character.presenter.CharacterPresenterImpl;
-import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterViewFragment;
+import com.mricomat.marvelcomicguide.ui.character.view.CharacterViewFragment;
 
 import dagger.Binds;
 import dagger.Module;

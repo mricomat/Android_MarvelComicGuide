@@ -6,7 +6,7 @@ import android.widget.ImageView;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterListListener;
+import com.mricomat.marvelcomicguide.ui.character.view.CharacterListComicListener;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import javax.inject.Inject;
@@ -26,11 +26,11 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
     ImageView mImageView;
 
     private PictureDownloader mPictureDownloader;
-    private CharacterListListener mListener;
+    private CharacterListComicListener mListener;
     private View mItemView;
 
     @Inject
-    public CharacterViewHolder(View itemView, final CharacterListListener listener, PictureDownloader pictureDownloader) {
+    public CharacterViewHolder(View itemView, final CharacterListComicListener listener, PictureDownloader pictureDownloader) {
         super(itemView);
         ButterKnife.bind(this,itemView);
         this.mItemView = itemView;
