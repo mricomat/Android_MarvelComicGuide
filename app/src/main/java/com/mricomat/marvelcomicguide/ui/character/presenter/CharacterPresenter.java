@@ -12,4 +12,6 @@ public interface CharacterPresenter extends BasePresenter<CharacterView> {
     void loadComics(String comicType);
 
     void fetchAllDataComics();
+
+    boolean haveDoneAllCalls();
 }

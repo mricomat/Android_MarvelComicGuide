@@ -1,9 +1,6 @@
 package com.mricomat.marvelcomicguide;
 
 import com.mricomat.marvelcomicguide.di.component.DaggerAppComponent;
-import com.mricomat.marvelcomicguide.utils.PictureDownloader;
-
-import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;

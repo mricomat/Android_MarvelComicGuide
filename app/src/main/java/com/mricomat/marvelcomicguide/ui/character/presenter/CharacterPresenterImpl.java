@@ -6,6 +6,8 @@ import com.mricomat.marvelcomicguide.data.model.DataWrapperModel;
 import com.mricomat.marvelcomicguide.ui.character.interactor.CharacterInteractor;
 import com.mricomat.marvelcomicguide.ui.character.view.CharacterView;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +23,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CharacterPresenterImpl implements CharacterPresenter {
 
+    private static final String COMICS_TYPE = "comics";
+    private static final String SERIES_TYPE = "series";
+    private static final String EVENTS_TYPE = "events";
+
     @Inject
     CharacterInteractor mInteractor;
 
@@ -29,10 +35,12 @@ public class CharacterPresenterImpl implements CharacterPresenter {
 
     private CompositeDisposable mCompositeDisposable;//TODO Injectarlo para que se utilice en todos los presenters;
     private CharacterView mView;
+    private HashMap<String, Boolean> mCallsDoneMap;
 
     @Inject
     public CharacterPresenterImpl() {
         mCompositeDisposable = new CompositeDisposable();
+        mCallsDoneMap = new HashMap<>();
     }
 
     @Override
@@ -54,31 +62,45 @@ public class CharacterPresenterImpl implements CharacterPresenter {
             .subscribe(new Consumer<DataWrapperModel<List<ComicModel>>>() {
                 @Override
                 public void accept(DataWrapperModel<List<ComicModel>> listDataWrapperModel) throws Exception {
-                    switch (comicType) {
-                        case "comics":
-                            mView.showComics(listDataWrapperModel.getData().getResults());
-                            break;
-                        case "series":
-                            mView.showSeries(listDataWrapperModel.getData().getResults());
-                            break;
-                        case "events":
-                            mView.showEvents(listDataWrapperModel.getData().getResults());
-                            break;
+                    if(mView != null) {
+                        switch (comicType) {
+                            case COMICS_TYPE:
+                                mCallsDoneMap.put(COMICS_TYPE, true);
+                                mView.showComics(listDataWrapperModel.getData().getResults());
+
+                                break;
+                            case SERIES_TYPE:
+                                mCallsDoneMap.put(SERIES_TYPE, true);
+                                mView.showSeries(listDataWrapperModel.getData().getResults());
+
+                                break;
+                            case EVENTS_TYPE:
+                                mCallsDoneMap.put(EVENTS_TYPE, true);
+                                mView.showEvents(listDataWrapperModel.getData().getResults());
+                                break;
+                        }
                     }
                 }
             }, new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
                     // TODO HANDLER ERROR
-                    mView.hideLoading();
+                    if (mView != null) {
+                        mView.hideLoading();
+                    }
                 }
             }));
     }
 
     @Override
     public void fetchAllDataComics() {
-        loadComics("comics");
-        loadComics("series");
-        loadComics("events");
+        loadComics(COMICS_TYPE);
+        loadComics(SERIES_TYPE);
+        loadComics(EVENTS_TYPE);
+    }
+
+    @Override
+    public boolean haveDoneAllCalls() {
+        return Collections.frequency(mCallsDoneMap.values(), true) == mCallsDoneMap.size();
     }
 }

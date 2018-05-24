@@ -1,19 +1,21 @@
 package com.mricomat.marvelcomicguide.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.network.MarvelImageApi;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,13 +32,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Singleton
 public class PictureDownloader {
 
-    private static final String BASE_URL = "http://i.annihil.us/";
+    private static final String PICTURE_BASE_URL = "http://i.annihil.us/";
 
     private CacheImageHandler mCacheHandler;
+    private Context mContext;
+    private HashMap<Integer, WeakReference<BitmapDownloaderTask>> mTasksReferenceHashMap;
 
     @Inject
-    public PictureDownloader(CacheImageHandler cacheHandler) {
+    public PictureDownloader(CacheImageHandler cacheHandler, Context context) {
         this.mCacheHandler = cacheHandler;
+        this.mContext = context;
+        mTasksReferenceHashMap = new HashMap<>();
     }
 
     public void download(String url, ImageView imageView) {
@@ -65,15 +71,19 @@ public class PictureDownloader {
 
         if (cancelPotentialDownload(url, imageView)) {
             BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
-            DownloadedDrawable downloadedDrawable = new DownloadedDrawable(task);
-            imageView.setImageDrawable(downloadedDrawable);
+            WeakReference<BitmapDownloaderTask> mBitmapDownloaderTaskReference;
+            mBitmapDownloaderTaskReference =
+                new WeakReference<BitmapDownloaderTask>(task);
+            Integer keyId = (int) System.currentTimeMillis();
+            mTasksReferenceHashMap.put(keyId, mBitmapDownloaderTaskReference);
+            imageView.setId(keyId);
             task.execute(url);
         }
     }
 
     Bitmap downloadBitmapFromUrl(String url) {
         Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(PICTURE_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
@@ -107,7 +117,7 @@ public class PictureDownloader {
         return null;
     }
 
-    private static boolean cancelPotentialDownload(String url, ImageView imageView) {
+    private boolean cancelPotentialDownload(String url, ImageView imageView) {
         BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
 
         if (bitmapDownloaderTask != null) {
@@ -120,6 +130,7 @@ public class PictureDownloader {
         }
         return true;
     }
+
 
     private class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -142,7 +153,6 @@ public class PictureDownloader {
                 bitmap = null;
             }
 
-           // Bitmap bitmapCopy = bitmap.copy(bitmap.getConfig(), true);
             mCacheHandler.saveBitmapToCache(url, bitmap);
 
             if (mImageViewWeakReference != null) {
@@ -151,33 +161,20 @@ public class PictureDownloader {
                 // Change bitmap only if this process is still associated with it
                 if ((this == bitmapDownloaderTask)) {
                     imageView.setImageBitmap(bitmap);
+                    Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in_image);
+                    imageView.startAnimation(fadeInAnimation);
                 }
             }
         }
     }
 
-    private static BitmapDownloaderTask getBitmapDownloaderTask(ImageView imageView) {
+    private BitmapDownloaderTask getBitmapDownloaderTask(ImageView imageView) {
         if (imageView != null) {
-            Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof DownloadedDrawable) {
-                DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
-                return downloadedDrawable.getBitmapDownloaderTask();
+            Integer id = imageView.getId();
+            if (mTasksReferenceHashMap.containsKey(id)) {
+                return mTasksReferenceHashMap.get(id).get();
             }
         }
         return null;
-    }
-
-    private static class DownloadedDrawable extends ColorDrawable {
-        private final WeakReference<BitmapDownloaderTask> mBitmapDownloaderTaskReference;
-
-        public DownloadedDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
-            super(Color.BLACK);
-            mBitmapDownloaderTaskReference =
-                new WeakReference<BitmapDownloaderTask>(bitmapDownloaderTask);
-        }
-
-        public BitmapDownloaderTask getBitmapDownloaderTask() {
-            return mBitmapDownloaderTaskReference.get();
-        }
     }
 }

@@ -133,7 +133,7 @@ public class HomeListViewFragment extends DaggerFragment implements HomeListView
         mHomeRecyclerView.addOnScrollListener(new EndlessRecyclerViewOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if(TextUtils.isEmpty(mSearchQuery)){
+                if (TextUtils.isEmpty(mSearchQuery)) {
                     mAdapter.addCharacter(null);
                     mPresenter.loadCharacters(totalItemsCount, ITEM_REQUEST_LIMIT, mSearchQuery);
                 }

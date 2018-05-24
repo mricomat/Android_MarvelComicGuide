@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -69,7 +68,6 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     private CharacterAdapter mSeriesAdapter;
     private CharacterAdapter mEventsAdapter;
     private CharacterListListener mListListener;
-    private int mCallsCount = 0;
 
     @Inject
     public CharacterViewFragment() {
@@ -95,19 +93,14 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     }
 
     private void fillViews() {
-        setListeners();
-
-        mComicsAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
-        mSeriesAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
-        mEventsAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
-
-        mPresenter.fetchAllDataComics();
-
         if (!mCharacter.getDescription().isEmpty()) {
             mDescriptionTitle.setVisibility(View.VISIBLE);
             mDescriptionDetail.setVisibility(View.VISIBLE);
             mDescriptionDetail.setText(mCharacter.getDescription());
         }
+        setListeners();
+        initializeRecyclersViews();
+        mPresenter.fetchAllDataComics();
     }
 
     private void setListeners() {
@@ -115,20 +108,43 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
             @Override
             public void onCharacterClick(ComicModel comic) {
                 // TODO
-                String s;
             }
         };
+    }
+
+    private void initializeRecyclersViews() {
+        mComicsAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
+        mSeriesAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
+        mEventsAdapter = new CharacterAdapter(mListListener, mPictureDownloader); // TODO Inject?
+
+        if (!mCharacter.getComicsList().getComics().isEmpty()) {
+            mComicTitle.setVisibility(View.VISIBLE);
+            mComicsRecycleView.setVisibility(View.VISIBLE);
+            mComicsRecycleView.setLayoutManager(newLinearLayoutManager());
+            mComicsRecycleView.setAdapter(mComicsAdapter);
+            mComicsAdapter.setComics(mCharacter.getComicsList().getComics());
+        }
+
+        if (!mCharacter.getSeriesList().getComics().isEmpty()) {
+            mSeriesTitle.setVisibility(View.VISIBLE);
+            mSeriesRecycleView.setVisibility(View.VISIBLE);
+            mSeriesRecycleView.setLayoutManager(newLinearLayoutManager());
+            mSeriesRecycleView.setAdapter(mSeriesAdapter);
+            mSeriesAdapter.setComics(mCharacter.getSeriesList().getComics());
+        }
+
+        if (!mCharacter.getEventsList().getComics().isEmpty()) {
+            mEventsTitle.setVisibility(View.VISIBLE);
+            mEventsRecycleView.setVisibility(View.VISIBLE);
+            mEventsRecycleView.setLayoutManager(newLinearLayoutManager());
+            mEventsRecycleView.setAdapter(mEventsAdapter);
+            mEventsAdapter.setComics(mCharacter.getEventsList().getComics());
+        }
     }
 
     @Override
     public void showComics(List<ComicModel> comics) {
         if (!comics.isEmpty()) {
-            mComicTitle.setVisibility(View.VISIBLE);
-            mComicsRecycleView.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            mComicsRecycleView.setLayoutManager(linearLayoutManager);
-            mComicsRecycleView.setAdapter(mComicsAdapter);
             mComicsAdapter.setComics(comics);
         }
         hideLoading();
@@ -137,12 +153,6 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     @Override
     public void showSeries(List<ComicModel> series) {
         if (!series.isEmpty()) {
-            mSeriesTitle.setVisibility(View.VISIBLE);
-            mSeriesRecycleView.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            mSeriesRecycleView.setLayoutManager(linearLayoutManager);
-            mSeriesRecycleView.setAdapter(mSeriesAdapter);
             mSeriesAdapter.setComics(series);
         }
         hideLoading();
@@ -151,15 +161,15 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
     @Override
     public void showEvents(List<ComicModel> events) {
         if (!events.isEmpty()) {
-            mEventsTitle.setVisibility(View.VISIBLE);
-            mEventsRecycleView.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            mEventsRecycleView.setLayoutManager(linearLayoutManager);
-            mEventsRecycleView.setAdapter(mEventsAdapter);
             mEventsAdapter.setComics(events);
         }
         hideLoading();
+    }
+
+    private LinearLayoutManager newLinearLayoutManager() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        return linearLayoutManager;
     }
 
     @Override
@@ -169,10 +179,8 @@ public class CharacterViewFragment extends DaggerFragment implements CharacterVi
 
     @Override
     public void hideLoading() {
-        mCallsCount++; // TODO Diccionario booleans llamdas
-        if (mCallsCount == 3) {
+        if (mPresenter.haveDoneAllCalls()) {
             mProgressBar.setVisibility(View.GONE);
-            mCallsCount = 0;
         }
     }
 }

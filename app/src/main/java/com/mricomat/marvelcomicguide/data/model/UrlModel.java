@@ -18,6 +18,7 @@ public class UrlModel implements Parcelable{
     private String mUrl;
 
     public UrlModel() {
+        // Requires empty public constructor
     }
 
     public String getType() {

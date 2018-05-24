@@ -39,6 +39,9 @@ public class CharacterActivity extends DaggerAppCompatActivity {
     @Inject
     CharacterModel mCharacter;
 
+    @Inject
+    PictureDownloader mPictureDownloader;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +72,7 @@ public class CharacterActivity extends DaggerAppCompatActivity {
     }
 
     private void fillImageCharacter() {
-        CacheImageHandler cacheImageHandler = new CacheImageHandler(this);
-        PictureDownloader mp = new PictureDownloader(cacheImageHandler);
-        mp.download(mCharacter.getThumbnail().getCompleteImagePath(), mImageHeader);
+        mPictureDownloader.download(mCharacter.getThumbnail().getCompleteImagePath(), mImageHeader);
     }
 
     private void navigateToCharacterFragment() {

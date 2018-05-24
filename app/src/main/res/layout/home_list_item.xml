@@ -36,5 +36,4 @@
         android:textSize="15sp"
         tools:text="DeadPool"/>
 
-
 </RelativeLayout>

@@ -39,8 +39,11 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindModel(final ComicModel comicModel) {
-        String imageUrl = comicModel.getThumbnail().getCompleteImagePath().substring(START_IMAGE_URL);
-        mPictureDownloader.download(imageUrl, mImageView);
+        if (comicModel.getThumbnail() != null) {
+            String imageUrl = comicModel.getThumbnail().getCompleteImagePath().substring(START_IMAGE_URL);
+            mImageView.setImageResource(R.drawable.detail);
+            mPictureDownloader.download(imageUrl, mImageView);
+        }
         mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

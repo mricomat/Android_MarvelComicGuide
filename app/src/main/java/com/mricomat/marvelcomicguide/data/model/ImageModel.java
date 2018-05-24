@@ -18,6 +18,7 @@ public class ImageModel implements Parcelable{
     private String mExtension;
 
     public ImageModel() {
+        // Requires empty public constructor
     }
 
     public String getPath() {

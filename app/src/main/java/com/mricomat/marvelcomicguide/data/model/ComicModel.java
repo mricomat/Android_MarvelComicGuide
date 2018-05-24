@@ -41,7 +41,7 @@ public class ComicModel implements Parcelable{
     private List<ImageModel> mImageList;
 
     public ComicModel() {
-
+        // Requires empty public constructor
     }
 
     public Integer getId() {

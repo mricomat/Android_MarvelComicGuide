@@ -22,6 +22,7 @@ public class DataWrapperModel<T> {
     private DataContainerModel<T> mData;
 
     public DataWrapperModel() {
+        // Requires empty public constructor
     }
 
     public int getCode() {

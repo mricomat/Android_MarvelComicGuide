@@ -22,7 +22,7 @@ public class DataContainerModel<T> {
     private T mResults;
 
     public DataContainerModel() {
-
+        // Requires empty public constructor
     }
 
     public int getOffset() {
