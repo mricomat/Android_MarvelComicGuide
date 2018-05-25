@@ -8,6 +8,14 @@
     android:background="@color/colorPrimary"
     tools:context="com.mricomat.marvelcomicguide.ui.home.HomeListActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:background="@color/colorPrimary"
+        android:scaleType="centerCrop"
+        android:alpha="0.05"/>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"

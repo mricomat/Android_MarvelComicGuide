@@ -1,4 +1,4 @@
-package com.mricomat.marvelcomicguide.ui.character.view;
+package com.mricomat.marvelcomicguide.ui.character.adapter;
 
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
 

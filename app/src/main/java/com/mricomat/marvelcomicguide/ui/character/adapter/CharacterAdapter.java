@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterListComicListener;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import java.util.ArrayList;

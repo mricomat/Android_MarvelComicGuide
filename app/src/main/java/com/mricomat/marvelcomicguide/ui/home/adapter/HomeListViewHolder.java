@@ -40,7 +40,7 @@ public class HomeListViewHolder extends RecyclerView.ViewHolder {
 
     public void bindModel(final CharacterModel character) {
         String imageUrl = character.getThumbnail().getCompleteImagePath().substring(START_IMAGE_URL);
-        mImageView.setImageResource(R.drawable.detail);
+        //mImageView.setImageResource(R.drawable.detail);
         mPictureDownloader.download(imageUrl, mImageView);
         mCharacterName.setText(character.getName());
         mItemView.setOnClickListener(new View.OnClickListener() {

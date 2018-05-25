@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
-import com.mricomat.marvelcomicguide.ui.character.view.CharacterListComicListener;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 
 import javax.inject.Inject;
@@ -41,7 +40,7 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
     public void bindModel(final ComicModel comicModel) {
         if (comicModel.getThumbnail() != null) {
             String imageUrl = comicModel.getThumbnail().getCompleteImagePath().substring(START_IMAGE_URL);
-            mImageView.setImageResource(R.drawable.detail);
+            //mImageView.setImageResource(R.drawable.detail);
             mPictureDownloader.download(imageUrl, mImageView);
         }
         mItemView.setOnClickListener(new View.OnClickListener() {

@@ -14,6 +14,7 @@ import com.mricomat.marvelcomicguide.R;
 import com.mricomat.marvelcomicguide.data.model.CharacterModel;
 import com.mricomat.marvelcomicguide.data.model.ComicModel;
 import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterAdapter;
+import com.mricomat.marvelcomicguide.ui.character.adapter.CharacterListComicListener;
 import com.mricomat.marvelcomicguide.ui.character.presenter.CharacterPresenter;
 import com.mricomat.marvelcomicguide.utils.PictureDownloader;
 

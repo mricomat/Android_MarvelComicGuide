@@ -105,7 +105,7 @@ public class PictureDownloader {
             }
         } catch (IOException e) {
             //service.getImage().cancel();
-            Log.w("DownloadBitMap", "I/O error while retrieving bitmap from " + url, e);
+            Log.w("DownloadBitMap", "I/O ErrorActivity while retrieving bitmap from " + url, e);
         } catch (IllegalStateException e) {
             //service.getImage().cancel();
             Log.w("DownloadBitMap", "Incorrect URL: " + url);
